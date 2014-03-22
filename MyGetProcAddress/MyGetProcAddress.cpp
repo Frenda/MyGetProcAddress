@@ -61,8 +61,7 @@ FARPROC GetExportByName(HMODULE hModule, char *ProcName)
 			}
 		}
 		ApiAddress = (FARPROC)((DWORD)hModule + Eat[Ordinal]);
-		if ((DWORD)ApiAddress >= (DWORD)ExportTable &&
-			((DWORD)ApiAddress < ((DWORD)ExportTable + ExportSize)))
+		if ((DWORD)ApiAddress >= (DWORD)ExportTable && ((DWORD)ApiAddress < ((DWORD)ExportTable + ExportSize)))
 			ApiAddress = FileNameRedirection(hModule, (char *)ApiAddress);
 	}
 	return ApiAddress;
@@ -83,8 +82,7 @@ FARPROC GetExportByOrdinal(HMODULE hModule, WORD Ordinal)
 		Eat = (DWORD *)((DWORD)hModule + ExportTable->AddressOfFunctions);
 		NameOrd = (WORD *)((DWORD)hModule + ExportTable->AddressOfNameOrdinals);
 		ApiAddress = (FARPROC)((Eat[Ordinal - ExportTable->Base] != 0) ? ((DWORD)hModule + Eat[Ordinal - ExportTable->Base]) : 0);
-		if (((DWORD)ApiAddress >= (DWORD)ExportTable) &&
-			((DWORD)ApiAddress < ((DWORD)ExportTable + ExportSize)))
+		if (((DWORD)ApiAddress >= (DWORD)ExportTable) && ((DWORD)ApiAddress < ((DWORD)ExportTable + ExportSize)))
 			ApiAddress = FileNameRedirection(hModule, (char *)ApiAddress);
 	}
 	return ApiAddress;
@@ -107,7 +105,7 @@ FARPROC GetExportByOrdinal(HMODULE hModule, WORD Ordinal)
 		 case 2:
 		 {
 				   SetMapHead_v2 = (PAPI_SET_NAMESPACE_ARRAY_V2)Version;
-				   for (DWORD i = 0; i < SetMapHead_v2->Count; i++)
+				   for (DWORD i = 0; i < SetMapHead_v2->Count; ++i)
 				   {
 					   NameBuffer = (WCHAR *)((DWORD)SetMapHead_v2 + SetMapHead_v2->Entry[i].NameOffset);
 					   LibNameSize = SetMapHead_v2->Entry[i].NameLength;
@@ -126,7 +124,7 @@ FARPROC GetExportByOrdinal(HMODULE hModule, WORD Ordinal)
 		 case 4:
 		 {
 				   SetMapHead_v4 = (PAPI_SET_NAMESPACE_ARRAY_V4)Version;
-				   for (DWORD i = 0; i < SetMapHead_v4->Count; i++)
+				   for (DWORD i = 0; i < SetMapHead_v4->Count; ++i)
 				   {
 					   NameBuffer = (WCHAR *)((DWORD)SetMapHead_v4 + SetMapHead_v4->Entry[i].NameOffset);
 					   LibNameSize = SetMapHead_v4->Entry[i].NameLength;
@@ -168,7 +166,7 @@ FARPROC FileNameRedirection(HMODULE hModule, char *RedirectionName)
 		else
 		{
 		get_api_address:
-			hModule = LoadLibrary(DllName);
+			hModule = LoadLibraryW(DllName);
 			if (hModule)
 			{
 				ProcName = (char *)(ptr + 1);
