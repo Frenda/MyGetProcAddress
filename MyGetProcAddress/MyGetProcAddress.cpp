@@ -60,6 +60,8 @@ FARPROC GetExportByName(HMODULE hModule, char *ProcName)
 				break;
 			}
 		}
+		if (LowIndex > HigthIndex)
+			return 0;
 		ApiAddress = (FARPROC)((DWORD)hModule + Eat[Ordinal]);
 		if ((DWORD)ApiAddress >= (DWORD)ExportTable && ((DWORD)ApiAddress < ((DWORD)ExportTable + ExportSize)))
 			ApiAddress = FileNameRedirection(hModule, (char *)ApiAddress);
